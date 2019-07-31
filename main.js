@@ -77,6 +77,8 @@ const {
 } = require('./app/protocol_filter');
 const { installPermissionsHandler } = require('./app/permissions');
 
+const encryptionChannel = require('./app/encryption_channel');
+
 function showWindow() {
   if (!mainWindow) {
     return;
@@ -659,6 +661,8 @@ app.on('ready', async () => {
   installWebHandler({
     protocol: electronProtocol,
   });
+
+  encryptionChannel.initialize();
 
   installPermissionsHandler({ session, userConfig });
 
