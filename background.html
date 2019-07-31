@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset='utf-8'>
-  <meta content='width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0' name='viewport'>
+  <meta content='width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0'
+    name='viewport'>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy"
-    content="default-src 'none';
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none';
             child-src 'self';
             connect-src 'self' https: wss:;
             font-src 'self';
@@ -17,8 +18,7 @@
             media-src 'self' blob:;
             object-src 'none';
             script-src 'self';
-            style-src 'self' 'unsafe-inline';"
-  >
+            style-src 'self' 'unsafe-inline';">
   <title>Signal</title>
   <link href='images/icon_128.png' rel='shortcut icon'>
   <link href="stylesheets/manifest.css" rel="stylesheet" type="text/css" />
@@ -122,8 +122,12 @@
                     <button class='microphone'></button>
                 </div>
                 <div class='choose-file'>
-                    <button class='paperclip thumbnail'></button>
+                    <button class='paperclip thumbnail regular-file-input'></button>
                     <input type='file' class='file-input' multiple='multiple'>
+                </div>
+                <div class='choose-secure-file'>
+                    <button class='paperclip thumbnail secure-file-input'></button>
+                    <input type='file' class='secure-file-input' multiple='multiple'>
                 </div>
               </div>
             </form>
@@ -525,6 +529,7 @@
   <script type='text/javascript' src='js/rotate_signed_prekey_listener.js'></script>
   <script type='text/javascript' src='js/keychange_listener.js'></script>
 </head>
+
 <body class="overflow-hidden">
   <div class='app-loading-screen'>
     <div class='content'>
@@ -540,4 +545,5 @@
 
   <script type='text/javascript' src='js/background.js'></script>
 </body>
+
 </html>

@@ -11,7 +11,7 @@
 */
 
 // eslint-disable-next-line func-names
-(function() {
+(function () {
   'use strict';
 
   window.Whisper = window.Whisper || {};
@@ -197,6 +197,22 @@
         }
       });
 
+      this.secureFileInput = new Whisper.FileInputView({
+        el: this.$('.attachment-list'),
+      });
+      this.listenTo(
+        this.secureFileInput,
+        'choose-attachment',
+        this.onChooseAttachment
+      );
+      this.listenTo(this.secureFileInput, 'staged-attachments-changed', () => {
+        this.view.restoreBottomOffset();
+        this.toggleMicrophone();
+        if (this.secureFileInput.hasFiles()) {
+          this.removeLinkPreview();
+        }
+      });
+
       this.view = new Whisper.MessageListView({
         collection: this.model.messageCollection,
         window: this.window,
@@ -238,8 +254,11 @@
       'farFromBottom .message-list': 'addScrollDownButton',
       'lazyScroll .message-list': 'onLazyScroll',
 
-      'click button.paperclip': 'onChooseAttachment',
+      'click button.regular-file-input': 'onChooseAttachment',
       'change input.file-input': 'onChoseAttachment',
+
+      'click button.secure-file-input': 'onChooseSecureAttachment',
+      'change input.secure-file-input': 'onChoseSecureAttachment',
 
       dragover: 'onDragOver',
       dragleave: 'onDragLeave',
@@ -365,6 +384,28 @@
         const file = files[i];
         // eslint-disable-next-line no-await-in-loop
         await this.fileInput.maybeAddAttachment(file);
+        this.toggleMicrophone();
+      }
+
+      fileField.val(null);
+    },
+
+    onChooseSecureAttachment(e) {
+      if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+
+      this.$('input.secure-file-input').click();
+    },
+    async onChoseSecureAttachment() {
+      const fileField = this.$('input.secure-file-input');
+      const files = fileField.prop('files');
+
+      for (let i = 0, max = files.length; i < max; i += 1) {
+        const file = files[i];
+        // eslint-disable-next-line no-await-in-loop
+        await this.secureFileInput.maybeAddAttachment(file);
         this.toggleMicrophone();
       }
 
