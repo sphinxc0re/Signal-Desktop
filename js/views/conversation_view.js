@@ -1954,10 +1954,9 @@
     pgpEncrypt(attachments, key) {
       return attachments
         .map(file => ({
+          ...file,
           data: window.Signal.Data.secunetEncrypt(file.data, key),
-          name: file.fileName,
-        }))
-        .map(encryptedData => new File(encryptedData.data, `${encryptedData.name}.pgp`));
+        }));
     },
 
     onEditorStateChange(messageText, caretLocation) {
