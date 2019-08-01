@@ -156,6 +156,9 @@ module.exports = {
   updateEmojiUsage,
   getRecentEmojis,
 
+  secunetEncrypt,
+  secunetDecrypt,
+
   removeAll,
   removeAllConfiguration,
 
@@ -959,6 +962,25 @@ async function updateEmojiUsage(shortName) {
 }
 async function getRecentEmojis(limit = 32) {
   return channels.getRecentEmojis(limit);
+}
+
+// SecuNet VSNFD functions
+
+const DELIMITER = '-';
+
+const PREFIX = 'vsnfd';
+const keyWithPrefix = key => [PREFIX, key].join(DELIMITER);
+
+// ipc keys
+const ENCRYPTION_REQUEST = keyWithPrefix('encrypt-attachment');
+const DECRYPTION_REQUEST = keyWithPrefix('decrypt-attachment');
+
+function secunetEncrypt(data, key) {
+  return ipcRenderer.sendSync(ENCRYPTION_REQUEST, { data, key });
+}
+
+function secunetDecrypt(data) {
+  return ipcRenderer.sendSync(DECRYPTION_REQUEST, { data });
 }
 
 // Other
