@@ -1916,11 +1916,17 @@
       }
 
       try {
-        if (!message.length && !this.fileInput.hasFiles()) {
+        if (!message.length && !this.fileInput.hasFiles() && !this.secureFileInput.hasFiles()) {
           return;
         }
 
-        const attachments = await this.fileInput.getFiles();
+        const regularAttachments = await this.fileInput.getFiles();
+        const secureAttachments = await this.secureFileInput.getFiles();
+
+        const encryptedAttachments = this.pgpEncrypt(secureAttachments);
+
+        const attachments = regularAttachments.concat(encryptedAttachments);
+
         const sendDelta = Date.now() - this.sendStart;
         window.log.info('Send pre-checks took', sendDelta, 'milliseconds');
 
@@ -1943,6 +1949,15 @@
       } finally {
         this.focusMessageFieldAndClearDisabled();
       }
+    },
+
+    pgpEncrypt(attachments, key) {
+      return attachments
+        .map(file => ({
+          data: window.Signal.Data.secunetEncrypt(file.data, key),
+          name: file.fileName,
+        }))
+        .map(encryptedData => new File(encryptedData.data, `${encryptedData.name}.pgp`));
     },
 
     onEditorStateChange(messageText, caretLocation) {

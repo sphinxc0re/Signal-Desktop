@@ -976,11 +976,13 @@ const ENCRYPTION_REQUEST = keyWithPrefix('encrypt-attachment');
 const DECRYPTION_REQUEST = keyWithPrefix('decrypt-attachment');
 
 function secunetEncrypt(data, key) {
-  return ipcRenderer.sendSync(ENCRYPTION_REQUEST, { data, key });
+  const result = ipcRenderer.sendSync(ENCRYPTION_REQUEST, { data: arrayBufferToBase64(data), key });
+
+  return base64ToArrayBuffer(result.data);
 }
 
 function secunetDecrypt(data) {
-  return ipcRenderer.sendSync(DECRYPTION_REQUEST, { data });
+  return ipcRenderer.sendSync(DECRYPTION_REQUEST, { data: arrayBufferToBase64(data) });
 }
 
 // Other

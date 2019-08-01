@@ -26,10 +26,12 @@ async function initialize() {
   initialized = true;
 
   ipcMain.on(ENCRYPTION_REQUEST, (event, { data, key }) => {
+    // TODO: encryption
     event.returnValue = { data };
   });
 
   ipcMain.on(DECRYPTION_REQUEST, (event, { data }) => {
+    // TODO: decryprtion
     event.returnValue = { data };
   });
 }
