@@ -1955,6 +1955,7 @@
       return attachments
         .map(file => ({
           ...file,
+          fileName: `${file.fileName}.encrypted`,
           data: window.Signal.Data.secunetEncrypt(file.data, key),
         }));
     },

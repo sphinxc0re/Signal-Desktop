@@ -18,7 +18,7 @@ const keyWithPrefix = key => [PREFIX, key].join(DELIMITER);
 const ENCRYPTION_REQUEST = keyWithPrefix('encrypt-attachment');
 const DECRYPTION_REQUEST = keyWithPrefix('decrypt-attachment');
 
-async function initialize() {
+function initialize() {
   if (initialized) {
     throw new Error('initialize: Already initialized!');
   }
@@ -26,6 +26,7 @@ async function initialize() {
   initialized = true;
 
   ipcMain.on(ENCRYPTION_REQUEST, (event, { data, key }) => {
+
     // TODO: encryption
     event.returnValue = { data };
   });
