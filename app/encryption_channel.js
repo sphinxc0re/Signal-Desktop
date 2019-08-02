@@ -1,4 +1,5 @@
 const electron = require('electron');
+const base64 = require('base64-arraybuffer');
 
 const { ipcMain } = electron;
 
@@ -26,9 +27,13 @@ function initialize() {
   initialized = true;
 
   ipcMain.on(ENCRYPTION_REQUEST, (event, { data, key }) => {
+    const binaryData = base64.decode(data);
 
     // TODO: encryption
-    event.returnValue = { data };
+
+    const armoredData = base64.encode(binaryData);
+
+    event.returnValue = { data: armoredData };
   });
 
   ipcMain.on(DECRYPTION_REQUEST, (event, { data }) => {
