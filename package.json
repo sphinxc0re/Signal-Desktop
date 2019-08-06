@@ -73,6 +73,7 @@
     "intl-tel-input": "12.1.15",
     "jquery": "3.4.1",
     "js-yaml": "3.13.1",
+    "jsqr": "^1.2.0",
     "linkify-it": "2.0.3",
     "lodash": "4.17.13",
     "memoizee": "0.4.14",
