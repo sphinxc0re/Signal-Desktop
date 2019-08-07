@@ -975,10 +975,18 @@ const keyWithPrefix = key => [PREFIX, key].join(DELIMITER);
 const ENCRYPTION_REQUEST = keyWithPrefix('encrypt-attachment');
 const DECRYPTION_REQUEST = keyWithPrefix('decrypt-attachment');
 
+const KEY_GENERATION_REQUEST = keyWithPrefix('generate-key');
+
+function generateKey() {
+  return ipcRenderer.sendSync(KEY_GENERATION_REQUEST);
+}
+
 function secunetEncrypt(data, key) {
   const result = ipcRenderer.sendSync(ENCRYPTION_REQUEST, { data: arrayBufferToBase64(data), key });
 
-  return base64ToArrayBuffer(result.data);
+  const encoder = new TextEncoder();
+
+  return encoder.encode(result.data);
 }
 
 function secunetDecrypt(data) {

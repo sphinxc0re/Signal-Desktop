@@ -1,6 +1,6 @@
 const electron = require('electron');
 const base64 = require('base64-arraybuffer');
-const openpgp = require('openpgp');
+const kbpgp = require('kbpgp');
 const QRCode = require('qrcode');
 
 const { ipcMain } = electron;
@@ -9,7 +9,11 @@ module.exports = {
   initialize,
 };
 
-let keyStore = {};
+let keyStore = null;
+
+kbpgp.KeyManager.generate_ecc({ userid: '01577 1411568' }, (err, charlie) => {
+  keyStore = charlie;
+});
 
 let initialized = false;
 
@@ -35,11 +39,14 @@ function initialize() {
   ipcMain.on(ENCRYPTION_REQUEST, (event, { data, key }) => {
     const binaryData = base64.decode(data);
 
-    // TODO: encryption
+    const params = {
+      msg: binaryData,
+      encrypt_for: keyStore,
+    };
 
-    const armoredData = base64.encode(binaryData);
-
-    event.returnValue = { data: armoredData };
+    kbpgp.box(params, (err, result_string, result_buffer) => {
+      event.returnValue = { data: result_string };
+    });
   });
 
   ipcMain.on(DECRYPTION_REQUEST, (event, { data }) => {
@@ -48,16 +55,6 @@ function initialize() {
   });
 
   ipcMain.on(KEY_GENERATION_REQUEST, async () => {
-    const options = {
-      userIds: [{ name: 'Jon Smith', email: 'jon@example.com' }],
-      curve: 'ed25519',
-      passphrase: 'super long and hard to guess secret',
-    };
 
-    const key = await openpgp.generateKey(options);
-
-    keyStore = { privKey: key };
-
-    event.returnValue = await QRCode.toDataURL(key.publicKeyArmored);
   });
 }
