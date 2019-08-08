@@ -27,8 +27,6 @@ const keyWithPrefix = key => [PREFIX, key].join(DELIMITER);
 const ENCRYPTION_REQUEST = keyWithPrefix('encrypt-attachment');
 const DECRYPTION_REQUEST = keyWithPrefix('decrypt-attachment');
 
-const KEY_GENERATION_REQUEST = keyWithPrefix('generate-key');
-
 function initialize() {
   if (initialized) {
     throw new Error('initialize: Already initialized!');
@@ -44,17 +42,13 @@ function initialize() {
       encrypt_for: keyStore,
     };
 
-    kbpgp.box(params, (err, result_string, result_buffer) => {
-      event.returnValue = { data: result_string };
+    kbpgp.box(params, (err, resultString) => {
+      event.returnValue = { data: resultString };
     });
   });
 
   ipcMain.on(DECRYPTION_REQUEST, (event, { data }) => {
     // TODO: decryprtion
     event.returnValue = { data };
-  });
-
-  ipcMain.on(KEY_GENERATION_REQUEST, async () => {
-
   });
 }

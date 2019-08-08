@@ -977,10 +977,6 @@ const DECRYPTION_REQUEST = keyWithPrefix('decrypt-attachment');
 
 const KEY_GENERATION_REQUEST = keyWithPrefix('generate-key');
 
-function generateKey() {
-  return ipcRenderer.sendSync(KEY_GENERATION_REQUEST);
-}
-
 function secunetEncrypt(data, key) {
   const result = ipcRenderer.sendSync(ENCRYPTION_REQUEST, { data: arrayBufferToBase64(data), key });
 
@@ -994,7 +990,6 @@ function secunetDecrypt(data) {
 }
 
 // Other
-
 async function removeAll() {
   await channels.removeAll();
 }
