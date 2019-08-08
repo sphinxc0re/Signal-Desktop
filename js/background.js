@@ -13,7 +13,7 @@
 */
 
 // eslint-disable-next-line func-names
-(async function() {
+(async function () {
   'use strict';
 
   const eventHandlerQueue = new window.PQueue({ concurrency: 1 });
@@ -38,13 +38,12 @@
 
   // Load these images now to ensure that they don't flicker on first use
   window.Signal.EmojiLib.preloadImages();
-  const images = [];
   function preload(list) {
-    for (let index = 0, max = list.length; index < max; index += 1) {
+    list.map((src) => {
       const image = new Image();
-      image.src = `./images/${list[index]}`;
-      images.push(image);
-    }
+      image.src = `./images/${src}`;
+      return image;
+    });
   }
   preload([
     'alert-outline.svg',
@@ -408,7 +407,7 @@
     let isMigrationWithIndexComplete = false;
     window.log.info(
       `Starting background data migration. Target version: ${
-        Message.CURRENT_SCHEMA_VERSION
+      Message.CURRENT_SCHEMA_VERSION
       }`
     );
     idleDetector.on('idle', async () => {
@@ -1549,7 +1548,7 @@
     } catch (error) {
       window.log.error(
         `Failed to send delivery receipt to ${data.source} for message ${
-          data.timestamp
+        data.timestamp
         }:`,
         error && error.stack ? error.stack : error
       );

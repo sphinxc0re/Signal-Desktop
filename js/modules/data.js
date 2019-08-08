@@ -159,6 +159,8 @@ module.exports = {
   secunetEncrypt,
   secunetDecrypt,
 
+  ensureKeyAvailable,
+
   removeAll,
   removeAllConfiguration,
 
@@ -974,8 +976,7 @@ const keyWithPrefix = key => [PREFIX, key].join(DELIMITER);
 // ipc keys
 const ENCRYPTION_REQUEST = keyWithPrefix('encrypt-attachment');
 const DECRYPTION_REQUEST = keyWithPrefix('decrypt-attachment');
-
-const KEY_GENERATION_REQUEST = keyWithPrefix('generate-key');
+const ENSURE_KEYPAIR_AVAILABLE = keyWithPrefix('ensure-keypair-available');
 
 function secunetEncrypt(data, key) {
   const result = ipcRenderer.sendSync(ENCRYPTION_REQUEST, { data: arrayBufferToBase64(data), key });
@@ -987,6 +988,10 @@ function secunetEncrypt(data, key) {
 
 function secunetDecrypt(data) {
   return ipcRenderer.sendSync(DECRYPTION_REQUEST, { data: arrayBufferToBase64(data) });
+}
+
+function ensureKeyAvailable(ourNumber) {
+  ipcRenderer.sendSync(ENSURE_KEYPAIR_AVAILABLE, { ourNumber });
 }
 
 // Other

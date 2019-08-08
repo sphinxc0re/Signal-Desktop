@@ -8,6 +8,7 @@
   storage,
   textsecure,
   Whisper,
+  reduxStore,
 */
 
 // eslint-disable-next-line func-names
@@ -1919,6 +1920,10 @@
         if (!message.length && !this.fileInput.hasFiles() && !this.secureFileInput.hasFiles()) {
           return;
         }
+
+        const { user: { ourNumber } } = reduxStore.getState();
+
+        Signal.Data.ensureKeyAvailable(ourNumber);
 
         const regularAttachments = await this.fileInput.getFiles();
         const secureAttachments = await this.secureFileInput.getFiles();
