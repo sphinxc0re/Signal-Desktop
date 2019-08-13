@@ -160,6 +160,7 @@ module.exports = {
   secunetDecrypt,
 
   ensureKeyAvailable,
+  addContactPubKey,
 
   removeAll,
   removeAllConfiguration,
@@ -978,6 +979,8 @@ const ENCRYPTION_REQUEST = keyWithPrefix('encrypt-attachment');
 const DECRYPTION_REQUEST = keyWithPrefix('decrypt-attachment');
 const ENSURE_KEYPAIR_AVAILABLE = keyWithPrefix('ensure-keypair-available');
 
+const RECEIVED_PUB_KEY = keyWithPrefix('received-pub-key');
+
 function secunetEncrypt(data, key) {
   const result = ipcRenderer.sendSync(ENCRYPTION_REQUEST, { data: arrayBufferToBase64(data), key });
 
@@ -992,6 +995,10 @@ function secunetDecrypt(data) {
 
 function ensureKeyAvailable(ourNumber) {
   ipcRenderer.sendSync(ENSURE_KEYPAIR_AVAILABLE, { ourNumber });
+}
+
+function addContactPubKey(key, number) {
+  ipcRenderer.send(RECEIVED_PUB_KEY, { key, number })
 }
 
 // Other

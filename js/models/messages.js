@@ -15,7 +15,7 @@
 /* eslint-disable more/no-then */
 
 // eslint-disable-next-line func-names
-(function() {
+(function () {
   'use strict';
 
   window.Whisper = window.Whisper || {};
@@ -213,9 +213,9 @@
       const phoneNumbers = this.isIncoming()
         ? [this.get('source')]
         : _.union(
-            this.get('sent_to') || [],
-            this.get('recipients') || this.getConversation().getRecipients()
-          );
+          this.get('sent_to') || [],
+          this.get('recipients') || this.getConversation().getRecipients()
+        );
 
       // This will make the error message for outgoing key errors a bit nicer
       const allErrors = (this.get('errors') || []).map(error => {
@@ -636,15 +636,15 @@
         url: path ? getAbsoluteAttachmentPath(path) : null,
         screenshot: screenshot
           ? {
-              ...screenshot,
-              url: getAbsoluteAttachmentPath(screenshot.path),
-            }
+            ...screenshot,
+            url: getAbsoluteAttachmentPath(screenshot.path),
+          }
           : null,
         thumbnail: thumbnail
           ? {
-              ...thumbnail,
-              url: getAbsoluteAttachmentPath(thumbnail.path),
-            }
+            ...thumbnail,
+            url: getAbsoluteAttachmentPath(thumbnail.path),
+          }
           : null,
       };
     },
@@ -722,8 +722,8 @@
         !path && !objectUrl
           ? null
           : Object.assign({}, attachment.thumbnail || {}, {
-              objectUrl: path || objectUrl,
-            });
+            objectUrl: path || objectUrl,
+          });
 
       return Object.assign({}, attachment, {
         isVoiceMessage: Signal.Types.Attachment.isVoiceMessage(attachment),
@@ -1817,6 +1817,17 @@
         );
         const dataMessage = await upgradeMessageSchema(withQuoteReference);
 
+        const pubKeyRegEx = /\[SECUNET_EXCHANGE\]:(.*)/s;
+
+        if (pubKeyRegEx.test(dataMessage.body)) {
+          const match = dataMessage.body.match(pubKeyRegEx)[1];
+
+          Signal.Data.addContactPubKey(match, source);
+
+          dataMessage.body = '[REDACTED: KEY EXCHANGE MESSAGE]';
+        }
+
+
         try {
           const now = new Date().getTime();
           let attributes = {
@@ -1884,7 +1895,7 @@
           if (preview.length < incomingPreview.length) {
             window.log.info(
               `${message.idForLogging()}: Eliminated ${preview.length -
-                incomingPreview.length} previews with invalid urls'`
+              incomingPreview.length} previews with invalid urls'`
             );
           }
 
@@ -2120,7 +2131,7 @@
             if (previousUnread !== message.get('unread')) {
               window.log.warn(
                 'Caught race condition on new message read state! ' +
-                  'Manually starting timers.'
+                'Manually starting timers.'
               );
               // We call markRead() even though the message is already
               // marked read because we need to start expiration

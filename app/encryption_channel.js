@@ -11,7 +11,9 @@ module.exports = {
   initialize,
 };
 
-let KEY_STORE = null;
+let KEY_STORE = {};
+KEY_STORE.myKey = null;
+KEY_STORE.contacts = {};
 
 let initialized = false;
 
@@ -25,6 +27,8 @@ const keyWithPrefix = key => [PREFIX, key].join(DELIMITER);
 const ENCRYPTION_REQUEST = keyWithPrefix('encrypt-attachment');
 const DECRYPTION_REQUEST = keyWithPrefix('decrypt-attachment');
 const ENSURE_KEYPAIR_AVAILABLE = keyWithPrefix('ensure-keypair-available');
+
+const RECEIVED_PUB_KEY = keyWithPrefix('received-pub-key');
 
 function initialize() {
   if (initialized) {
@@ -55,14 +59,16 @@ function initialize() {
 
 
   const KEY_DIR = `${userHome}/.secunetMessenger`;
+  const CONTACT_KEYS_DIR = `${KEY_DIR}/contacts`;
   if (!fs.existsSync(KEY_DIR)) {
-    fs.mkdirSync(KEY_DIR, { recursive: true });
+    fs.mkdirSync(KEY_DIR);
+    fs.mkdirSync(CONTACT_KEYS_DIR);
   }
 
   const KEY_FILE_NAME = 'user.key';
 
   ipcMain.on(ENSURE_KEYPAIR_AVAILABLE, (event, { ourNumber }) => {
-    if (KEY_STORE) {
+    if (KEY_STORE.myKey) {
       event.returnValue = null;
       return;
     }
@@ -72,11 +78,11 @@ function initialize() {
       const privKeyArmored = fs.readFileSync(keyFileName);
 
       kbpgp.KeyManager.import_from_armored_pgp({ armored: privKeyArmored }, (err, ourKeyManager) => {
-        KEY_STORE = ourKeyManager;
+        KEY_STORE.myKey = ourKeyManager;
       });
     } else {
       kbpgp.KeyManager.generate_ecc({ userid: ourNumber }, (err, ourKeyManager) => {
-        KEY_STORE = ourKeyManager;
+        KEY_STORE.myKey = ourKeyManager;
 
         ourKeyManager.export_pgp_private({}, (err, pgpPrivateArmored) => {
           fs.writeFileSync(keyFileName, pgpPrivateArmored);
@@ -85,5 +91,9 @@ function initialize() {
     }
 
     event.returnValue = null;
+  });
+
+  ipcMain.on(RECEIVED_PUB_KEY, (event, { key, number }) => {
+    KEY_STORE.contacts[number] = key;
   });
 }
