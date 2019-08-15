@@ -1961,7 +1961,7 @@
             ...file,
             fileName: `${file.fileName}.encrypted`,
             data,
-            size: data.length,
+            size: data.byteLength,
           };
         }
         );

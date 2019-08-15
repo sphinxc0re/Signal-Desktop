@@ -140,9 +140,9 @@ function initialize() {
     return `${CONTACT_KEYS_DIR}/${number}.key`;
   }
 
-  const KEYFILE_REGEX = /([^/]+)\.key$/;
 
   function extractNumberFromKeyPath(keyPath) {
+    const KEYFILE_REGEX = /([^/]+)\.key$/;
     return keyPath.match(KEYFILE_REGEX)[1];
   }
 }
