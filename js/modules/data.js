@@ -1,4 +1,4 @@
-/* global window, setTimeout, IDBKeyRange */
+/* global window, setTimeout, IDBKeyRange, textsecure */
 
 const electron = require('electron');
 
@@ -161,7 +161,7 @@ module.exports = {
 
   ensureKeyAvailable,
   addContactPubKey,
-
+  exchangeKeyWithNumber,
   removeAll,
   removeAllConfiguration,
 
@@ -980,13 +980,12 @@ const DECRYPTION_REQUEST = keyWithPrefix('decrypt-attachment');
 const ENSURE_KEYPAIR_AVAILABLE = keyWithPrefix('ensure-keypair-available');
 
 const RECEIVED_PUB_KEY = keyWithPrefix('received-pub-key');
+const TEST_CONTACT_KEY_AVAILABLE = keyWithPrefix('test-contact-key-available');
 
-function secunetEncrypt(data, key) {
-  const result = ipcRenderer.sendSync(ENCRYPTION_REQUEST, { data: arrayBufferToBase64(data), key });
+function secunetEncrypt(data, number) {
+  const result = ipcRenderer.sendSync(ENCRYPTION_REQUEST, { data: arrayBufferToBase64(data), number });
 
-  const encoder = new TextEncoder();
-
-  return encoder.encode(result.data);
+  return result.data;
 }
 
 function secunetDecrypt(data) {
@@ -994,11 +993,35 @@ function secunetDecrypt(data) {
 }
 
 function ensureKeyAvailable(ourNumber) {
-  ipcRenderer.sendSync(ENSURE_KEYPAIR_AVAILABLE, { ourNumber });
+  return ipcRenderer.sendSync(ENSURE_KEYPAIR_AVAILABLE, { ourNumber });
+}
+
+function isContactKeyAvailable(number) {
+  const { result } = ipcRenderer.sendSync(TEST_CONTACT_KEY_AVAILABLE, { number });
+
+  return result;
 }
 
 function addContactPubKey(key, number) {
-  ipcRenderer.send(RECEIVED_PUB_KEY, { key, number })
+  ipcRenderer.send(RECEIVED_PUB_KEY, { key, number });
+}
+
+function exchangeKeyWithNumber(ourNumber, externalNumber) {
+  const { data } = ensureKeyAvailable(ourNumber);
+
+  if (!isContactKeyAvailable()) {
+    const message = `[SECUNET_EXCHANGE]:${data}`;
+
+    textsecure.messaging.sendMessageToNumber(
+      externalNumber,
+      message,
+      [],
+      undefined,
+      undefined,
+      undefined,
+      Date.now()
+    );
+  }
 }
 
 // Other

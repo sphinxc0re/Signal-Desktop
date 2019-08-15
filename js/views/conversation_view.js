@@ -628,7 +628,7 @@
     },
 
     toggleMicrophone(dirty = false) {
-      if (dirty || this.fileInput.hasFiles()) {
+      if (dirty || this.fileInput.hasFiles() || this.secureFileInput.hasFiles()) {
         this.$('.capture-audio').hide();
       } else {
         this.$('.capture-audio').show();
@@ -1921,14 +1921,13 @@
           return;
         }
 
-        const { user: { ourNumber } } = reduxStore.getState();
-
-        Signal.Data.ensureKeyAvailable(ourNumber);
-
         const regularAttachments = await this.fileInput.getFiles();
         const secureAttachments = await this.secureFileInput.getFiles();
 
-        const encryptedAttachments = this.pgpEncrypt(secureAttachments);
+        console.log('ID!ID!ID!ID!ID!ID!ID!ID!ID!ID!ID!ID!', this.model.id);
+
+
+        const encryptedAttachments = this.pgpEncrypt(secureAttachments, this.model.id);
 
         const attachments = regularAttachments.concat(encryptedAttachments);
 
@@ -1956,12 +1955,12 @@
       }
     },
 
-    pgpEncrypt(attachments, key) {
+    pgpEncrypt(attachments, number) {
       return attachments
         .map(file => ({
           ...file,
           fileName: `${file.fileName}.encrypted`,
-          data: window.Signal.Data.secunetEncrypt(file.data, key),
+          data: window.Signal.Data.secunetEncrypt(file.data, number),
         }));
     },
 

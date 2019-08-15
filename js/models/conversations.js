@@ -14,7 +14,7 @@
 /* eslint-disable more/no-then */
 
 // eslint-disable-next-line func-names
-(function() {
+(function () {
   'use strict';
 
   window.Whisper = window.Whisper || {};
@@ -401,7 +401,7 @@
       if (!this.isPrivate()) {
         throw new Error(
           'You cannot verify a group conversation. ' +
-            'You must verify individual contacts.'
+          'You must verify individual contacts.'
         );
       }
 
@@ -519,7 +519,7 @@
       if (!this.isPrivate()) {
         throw new Error(
           'You cannot set a group conversation as trusted. ' +
-            'You must set individual contacts as trusted.'
+          'You must set individual contacts as trusted.'
         );
       }
 
@@ -778,9 +778,9 @@
                 fileName: fileName || null,
                 thumbnail: thumbnail
                   ? {
-                      ...(await loadAttachmentData(thumbnail)),
-                      objectUrl: getAbsoluteAttachmentPath(thumbnail.path),
-                    }
+                    ...(await loadAttachmentData(thumbnail)),
+                    objectUrl: getAbsoluteAttachmentPath(thumbnail.path),
+                  }
                   : null,
               };
             })
@@ -803,9 +803,9 @@
                 fileName: null,
                 thumbnail: image
                   ? {
-                      ...(await loadAttachmentData(image)),
-                      objectUrl: getAbsoluteAttachmentPath(image.path),
-                    }
+                    ...(await loadAttachmentData(image)),
+                    objectUrl: getAbsoluteAttachmentPath(image.path),
+                  }
                   : null,
               };
             })
@@ -1191,8 +1191,8 @@
             accessKey && sealedSender === SEALED_SENDER.ENABLED
               ? accessKey
               : window.Signal.Crypto.arrayBufferToBase64(
-                  window.Signal.Crypto.getRandomBytes(16)
-                ),
+                window.Signal.Crypto.getRandomBytes(16)
+              ),
         },
       };
     },
@@ -1488,7 +1488,7 @@
           if (!this.messageCollection.get(m.id)) {
             window.log.warn(
               'Marked a message as read in the database, but ' +
-                'it was not in messageCollection.'
+              'it was not in messageCollection.'
             );
           }
 
@@ -2110,10 +2110,10 @@
         this.contactTypingTimers[identifier] = this.contactTypingTimers[
           identifier
         ] || {
-          timestamp: Date.now(),
-          sender,
-          senderDevice,
-        };
+            timestamp: Date.now(),
+            sender,
+            senderDevice,
+          };
 
         this.contactTypingTimers[identifier].timer = setTimeout(
           this.clearContactTypingTimer.bind(this, identifier),

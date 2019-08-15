@@ -4,11 +4,12 @@
   getInboxCollection,
   i18n,
   Whisper,
-  Signal
+  Signal,
+  reduxStore
 */
 
 // eslint-disable-next-line func-names
-(function() {
+(function () {
   'use strict';
 
   window.Whisper = window.Whisper || {};
@@ -196,6 +197,10 @@
 
       this.conversation_stack.open(conversation);
       this.focusConversation();
+
+      const { user: { ourNumber } } = reduxStore.getState();
+
+      Signal.Data.exchangeKeyWithNumber(ourNumber, id);
     },
     closeRecording(e) {
       if (e && this.$(e.target).closest('.capture-audio').length > 0) {
