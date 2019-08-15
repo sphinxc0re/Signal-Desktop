@@ -145,4 +145,4 @@ function initialize() {
   function extractNumberFromKeyPath(keyPath) {
     return keyPath.match(KEYFILE_REGEX)[1];
   }
-},
+}
