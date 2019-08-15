@@ -7,8 +7,7 @@
   Signal,
   storage,
   textsecure,
-  Whisper,
-  reduxStore,
+  Whisper
 */
 
 // eslint-disable-next-line func-names
@@ -1924,7 +1923,7 @@
         const regularAttachments = await this.fileInput.getFiles();
         const secureAttachments = await this.secureFileInput.getFiles();
 
-        const encryptedAttachments = this.pgpEncrypt(secureAttachments, this.model.id);
+        const encryptedAttachments = this.pgpEncrypt(secureAttachments, this.model.getNumber());
 
         const attachments = regularAttachments.concat(encryptedAttachments);
 

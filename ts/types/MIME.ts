@@ -2,6 +2,7 @@ export type MIMEType = string & { _mimeTypeBrand: any };
 
 export const APPLICATION_OCTET_STREAM = 'application/octet-stream' as MIMEType;
 export const APPLICATION_JSON = 'application/json' as MIMEType;
+export const APPLICATION_PGP = 'application/pgp' as MIMEType;
 export const AUDIO_AAC = 'audio/aac' as MIMEType;
 export const AUDIO_MP3 = 'audio/mp3' as MIMEType;
 export const IMAGE_GIF = 'image/gif' as MIMEType;
