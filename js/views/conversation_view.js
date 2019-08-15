@@ -1962,6 +1962,7 @@
             fileName: `${file.fileName}.encrypted`,
             data,
             size: data.byteLength,
+            contentType: 'text/pgp',
           };
         }
         );
