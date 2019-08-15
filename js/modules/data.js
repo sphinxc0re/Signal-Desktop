@@ -985,7 +985,13 @@ const TEST_CONTACT_KEY_AVAILABLE = keyWithPrefix('test-contact-key-available');
 function secunetEncrypt(data, number) {
   const result = ipcRenderer.sendSync(ENCRYPTION_REQUEST, { data: arrayBufferToBase64(data), number });
 
-  return result.data;
+  console.log('DATATATATATAA', result.data);
+
+  const encoder = new TextEncoder();
+
+  console.log('DATATATATATAA', encoder.encode(result.data));
+
+  return encoder.encode(result.data).buffer;
 }
 
 function secunetDecrypt(data) {

@@ -1924,9 +1924,6 @@
         const regularAttachments = await this.fileInput.getFiles();
         const secureAttachments = await this.secureFileInput.getFiles();
 
-        console.log('ID!ID!ID!ID!ID!ID!ID!ID!ID!ID!ID!ID!', this.model.id);
-
-
         const encryptedAttachments = this.pgpEncrypt(secureAttachments, this.model.id);
 
         const attachments = regularAttachments.concat(encryptedAttachments);
@@ -1957,11 +1954,17 @@
 
     pgpEncrypt(attachments, number) {
       return attachments
-        .map(file => ({
-          ...file,
-          fileName: `${file.fileName}.encrypted`,
-          data: window.Signal.Data.secunetEncrypt(file.data, number),
-        }));
+        .map(file => {
+          const data = Signal.Data.secunetEncrypt(file.data, number)
+
+          return {
+            ...file,
+            fileName: `${file.fileName}.encrypted`,
+            data,
+            size: data.length,
+          };
+        }
+        );
     },
 
     onEditorStateChange(messageText, caretLocation) {
