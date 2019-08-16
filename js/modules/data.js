@@ -1011,7 +1011,7 @@ function addContactPubKey(key, number) {
 function exchangeKeyWithNumber(ourNumber, externalNumber) {
   const { data } = ensureKeyAvailable(ourNumber);
 
-  if (!isContactKeyAvailable()) {
+  if (!isContactKeyAvailable(externalNumber)) {
     const message = `[SECUNET_EXCHANGE]:${data}`;
 
     textsecure.messaging.sendMessageToNumber(

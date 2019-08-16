@@ -77,6 +77,9 @@ function initialize() {
 
   const KEY_FILE_NAME = 'user.key';
 
+
+  // IPC function to ensure the existence of the private key.
+  // returns the armored public key
   ipcMain.on(ENSURE_KEYPAIR_AVAILABLE, (event, { ourNumber }) => {
     if (KEY_STORE.myKey === null) {
 
