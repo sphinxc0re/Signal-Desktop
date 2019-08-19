@@ -58,6 +58,7 @@ function initialize() {
   const USER_TMP_PATH = `${USER_DATA_PATH}/tmp`;
   if (!fs.existsSync(USER_TMP_PATH)) {
     fs.mkdirSync(USER_TMP_PATH);
+    fs.chmodSync(USER_TMP_PATH, '0750');
   }
 
   ipcMain.on(DECRYPTION_REQUEST, (event, { path }) => {
@@ -68,11 +69,7 @@ function initialize() {
 
       const decryptData = literals[0].toBuffer();
 
-      const superTmpFile = new tmp.File();
-
-      const tmpFilePath = `${USER_DATA_PATH}${superTmpFile.path}`;
-
-      superTmpFile.unlinkSync();
+      const tmpFilePath = `${USER_TMP_PATH}/${Math.random()}`;
 
       fs.writeFileSync(tmpFilePath, decryptData);
 
