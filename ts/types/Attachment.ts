@@ -1,3 +1,5 @@
+/* global Signal */
+
 import is from '@sindresorhus/is';
 import moment from 'moment';
 import { isNumber, padStart } from 'lodash';
@@ -335,13 +337,24 @@ export const save = ({
   timestamp?: number;
 }): void => {
   const isObjectURLRequired = is.undefined(attachment.path);
-  const url = !is.undefined(attachment.path)
+  let url = !is.undefined(attachment.path)
     ? getAbsolutePath(attachment.path)
     : arrayBufferToObjectURL({
-        data: attachment.data,
-        type: MIME.APPLICATION_OCTET_STREAM,
-      });
-  const filename = getSuggestedFilename({ attachment, timestamp, index });
+      data: attachment.data,
+      type: MIME.APPLICATION_OCTET_STREAM,
+    });
+  let filename = getSuggestedFilename({ attachment, timestamp, index });
+
+  if (filename.endsWith('.encrypted')) {
+    const fileArray = filename.split('.');
+    fileArray.pop();
+    filename = fileArray.join('.');
+
+    const { data } = Signal.Data.secunetDecrypt(url);
+
+    url = data;
+  }
+
   saveURLAsFile({ url, filename, document });
   if (isObjectURLRequired) {
     URL.revokeObjectURL(url);

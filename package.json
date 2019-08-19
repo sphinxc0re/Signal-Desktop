@@ -108,6 +108,7 @@
     "semver": "5.4.1",
     "spellchecker": "3.5.1",
     "tar": "4.4.8",
+    "temporary": "^1.0.1",
     "testcheck": "1.0.0-rc.2",
     "tmp": "0.0.33",
     "to-arraybuffer": "1.0.1",

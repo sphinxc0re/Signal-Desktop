@@ -3,6 +3,7 @@ const base64 = require('base64-arraybuffer');
 const kbpgp = require('kbpgp');
 const fs = require('fs');
 const userHome = require('os').homedir();
+const tmp = require('temporary');
 
 const { ipcMain } = electron;
 
@@ -13,6 +14,8 @@ module.exports = {
 const KEY_STORE = {};
 KEY_STORE.myKey = null;
 KEY_STORE.contacts = {};
+
+const KEY_RING = new kbpgp.keyring.KeyRing;
 
 let initialized = false;
 
@@ -51,10 +54,29 @@ function initialize() {
     });
   });
 
-  ipcMain.on(DECRYPTION_REQUEST, (event, { data }) => {
-    kbpgp.unbox({ keyfetch: KEY_STORE, armored: data }, (err, literals) => {
+  const USER_DATA_PATH = electron.app.getPath('userData');
+  const USER_TMP_PATH = `${USER_DATA_PATH}/tmp`;
+  if (!fs.existsSync(USER_TMP_PATH)) {
+    fs.mkdirSync(USER_TMP_PATH);
+  }
 
-      event.returnValue = { data: literals[0].toString() };
+  ipcMain.on(DECRYPTION_REQUEST, (event, { path }) => {
+    const armoredEncryptedMessage = fs.readFileSync(path);
+
+    kbpgp.unbox({ keyfetch: KEY_RING, armored: armoredEncryptedMessage }, (err, literals) => {
+      if (err) throw err;
+
+      const decryptData = literals[0].toBuffer();
+
+      const superTmpFile = new tmp.File();
+
+      const tmpFilePath = `${USER_DATA_PATH}${superTmpFile.path}`;
+
+      superTmpFile.unlinkSync();
+
+      fs.writeFileSync(tmpFilePath, decryptData);
+
+      event.returnValue = { data: tmpFilePath };
     });
   });
 
@@ -89,7 +111,7 @@ function initialize() {
         const privKeyArmored = fs.readFileSync(keyFileName);
 
         kbpgp.KeyManager.import_from_armored_pgp({ armored: privKeyArmored }, (err, ourKeyManager) => {
-
+          KEY_RING.add_key_manager(ourKeyManager);
           KEY_STORE.myKey = ourKeyManager;
 
           ourKeyManager.export_pgp_public({}, (err, pgpPublic) => {
@@ -98,6 +120,7 @@ function initialize() {
         });
       } else {
         kbpgp.KeyManager.generate_ecc({ userid: ourNumber }, (err, ourKeyManager) => {
+          KEY_RING.add_key_manager(ourKeyManager);
           KEY_STORE.myKey = ourKeyManager;
 
           ourKeyManager.sign({}, () => {
@@ -135,6 +158,7 @@ function initialize() {
 
   function importContactKey(number, key) {
     kbpgp.KeyManager.import_from_armored_pgp({ armored: key }, (err, ourKeyManager) => {
+      KEY_RING.add_key_manager(ourKeyManager);
       KEY_STORE.contacts[number] = ourKeyManager;
     });
   }

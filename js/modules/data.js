@@ -990,8 +990,8 @@ function secunetEncrypt(data, number) {
   return encoder.encode(result.data).buffer;
 }
 
-function secunetDecrypt(data) {
-  return ipcRenderer.sendSync(DECRYPTION_REQUEST, { data: arrayBufferToBase64(data) });
+function secunetDecrypt(path) {
+  return ipcRenderer.sendSync(DECRYPTION_REQUEST, { path });
 }
 
 function ensureKeyAvailable(ourNumber) {

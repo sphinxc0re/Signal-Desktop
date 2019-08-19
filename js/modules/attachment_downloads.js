@@ -187,7 +187,7 @@ async function _runJob(job) {
       if (error && error.code === 404) {
         logger.warn(
           `_runJob: Got 404 from server, marking attachment ${
-            attachment.id
+          attachment.id
           } from message ${message.idForLogging()} as permanent error`
         );
 
