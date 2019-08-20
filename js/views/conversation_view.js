@@ -179,6 +179,17 @@
         200
       );
 
+      this.throttledIsContactKeyAvailable = _.throttle(
+        Signal.Data.isContactKeyAvailable,
+        2000
+      );
+
+      this.showToastContactKeyNotAvailable = _.throttle(() => {
+        const toast = new Whisper.ContactKeyNotavailable();
+        toast.$el.appendTo(this.$el);
+        toast.render();
+      }, 3000);
+
       this.render();
 
       this.loadingScreen = new Whisper.ConversationLoadingScreen();
@@ -401,12 +412,10 @@
         e.preventDefault();
       }
 
-      if (Signal.Data.isContactKeyAvailable(this.model.id)) {
+      if (this.throttledIsContactKeyAvailable(this.model.id)) {
         this.$('input.secure-file-input').click();
       } else {
-        const toast = new Whisper.ContactKeyNotavailable();
-        toast.$el.appendTo(this.$el);
-        toast.render();
+        this.showToastContactKeyNotAvailable();
       }
     },
     async onChoseSecureAttachment() {
