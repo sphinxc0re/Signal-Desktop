@@ -29,6 +29,11 @@
       return { toastMessage: i18n('expiredWarning') };
     },
   });
+  Whisper.ContactKeyNotavailable = Whisper.ToastView.extend({
+    render_attributes() {
+      return { toastMessage: 'The contact\'s key is not available' };
+    },
+  });
   Whisper.BlockedToast = Whisper.ToastView.extend({
     render_attributes() {
       return { toastMessage: i18n('unblockToSend') };
@@ -203,7 +208,7 @@
       this.listenTo(
         this.secureFileInput,
         'choose-attachment',
-        this.onChooseAttachment
+        this.onChooseSecureAttachment
       );
       this.listenTo(this.secureFileInput, 'staged-attachments-changed', () => {
         this.view.restoreBottomOffset();
@@ -396,7 +401,13 @@
         e.preventDefault();
       }
 
-      this.$('input.secure-file-input').click();
+      if (Signal.Data.isContactKeyAvailable(this.model.id)) {
+        this.$('input.secure-file-input').click();
+      } else {
+        const toast = new Whisper.ContactKeyNotavailable();
+        toast.$el.appendTo(this.$el);
+        toast.render();
+      }
     },
     async onChoseSecureAttachment() {
       const fileField = this.$('input.secure-file-input');

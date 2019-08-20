@@ -162,6 +162,8 @@ module.exports = {
   ensureKeyAvailable,
   addContactPubKey,
   exchangeKeyWithNumber,
+  isContactKeyAvailable,
+
   removeAll,
   removeAllConfiguration,
 
