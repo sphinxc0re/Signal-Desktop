@@ -17,6 +17,8 @@ KEY_STORE.contacts = {};
 
 const KEY_RING = new kbpgp.keyring.KeyRing;
 
+const SENT_EXCHANGE_MESSAGE = {};
+
 let initialized = false;
 
 const DELIMITER = '-';
@@ -32,6 +34,8 @@ const ENSURE_KEYPAIR_AVAILABLE = keyWithPrefix('ensure-keypair-available');
 
 const RECEIVED_PUB_KEY = keyWithPrefix('received-pub-key');
 const TEST_CONTACT_KEY_AVAILABLE = keyWithPrefix('test-contact-key-available');
+
+const HAS_EXCHANGE_MESSAGE_BEEN_SENT = keyWithPrefix('has-exchange-message-been-sent');
 
 function initialize() {
   if (initialized) {
@@ -169,4 +173,13 @@ function initialize() {
     const KEYFILE_REGEX = /([^/]+)\.key$/;
     return keyPath.match(KEYFILE_REGEX)[1];
   }
+
+  ipcMain.on(HAS_EXCHANGE_MESSAGE_BEEN_SENT, (event, { number }) => {
+    if (SENT_EXCHANGE_MESSAGE[number]) {
+      event.returnValue = { result: true };
+    } else {
+      SENT_EXCHANGE_MESSAGE[number] = true;
+      event.returnValue = { result: false };
+    }
+  });
 }

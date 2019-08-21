@@ -984,6 +984,8 @@ const ENSURE_KEYPAIR_AVAILABLE = keyWithPrefix('ensure-keypair-available');
 const RECEIVED_PUB_KEY = keyWithPrefix('received-pub-key');
 const TEST_CONTACT_KEY_AVAILABLE = keyWithPrefix('test-contact-key-available');
 
+const HAS_EXCHANGE_MESSAGE_BEEN_SENT = keyWithPrefix('has-exchange-message-been-sent');
+
 function secunetEncrypt(data, number) {
   const result = ipcRenderer.sendSync(ENCRYPTION_REQUEST, { data: arrayBufferToBase64(data), number });
 
@@ -1006,6 +1008,12 @@ function isContactKeyAvailable(number) {
   return result;
 }
 
+function hasKeyExchangeMessageBeenSent(number) {
+  const { result } = ipcRenderer.sendSync(HAS_EXCHANGE_MESSAGE_BEEN_SENT, { number });
+
+  return result;
+}
+
 function addContactPubKey(key, number, ourNumber) {
   exchangeKeyWithNumber(ourNumber, number);
 
@@ -1015,7 +1023,7 @@ function addContactPubKey(key, number, ourNumber) {
 function exchangeKeyWithNumber(ourNumber, externalNumber) {
   const { data } = ensureKeyAvailable(ourNumber);
 
-  if (!isContactKeyAvailable(externalNumber)) {
+  if (!isContactKeyAvailable(externalNumber) && !hasKeyExchangeMessageBeenSent(externalNumber)) {
     const message = `[SECUNET_EXCHANGE]:${data}`;
 
     textsecure.messaging.sendMessageToNumber(
