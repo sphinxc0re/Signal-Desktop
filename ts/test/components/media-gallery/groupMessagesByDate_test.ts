@@ -20,6 +20,7 @@ const toMediaItem = (date: Date): MediaItemType => ({
     fileName: 'fileName',
     contentType: IMAGE_JPEG,
     url: 'url',
+    secure: false,
   },
 });
 
@@ -60,6 +61,7 @@ describe('groupMediaItemsByDate', () => {
               fileName: 'fileName',
               contentType: IMAGE_JPEG,
               url: 'url',
+              secure: false,
             },
           },
           {
@@ -74,6 +76,7 @@ describe('groupMediaItemsByDate', () => {
               fileName: 'fileName',
               contentType: IMAGE_JPEG,
               url: 'url',
+              secure: false,
             },
           },
         ],
@@ -93,6 +96,7 @@ describe('groupMediaItemsByDate', () => {
               fileName: 'fileName',
               contentType: IMAGE_JPEG,
               url: 'url',
+              secure: false,
             },
           },
         ],
@@ -112,6 +116,7 @@ describe('groupMediaItemsByDate', () => {
               fileName: 'fileName',
               contentType: IMAGE_JPEG,
               url: 'url',
+              secure: false,
             },
           },
         ],
@@ -131,6 +136,7 @@ describe('groupMediaItemsByDate', () => {
               fileName: 'fileName',
               contentType: IMAGE_JPEG,
               url: 'url',
+              secure: false,
             },
           },
           {
@@ -145,6 +151,7 @@ describe('groupMediaItemsByDate', () => {
               fileName: 'fileName',
               contentType: IMAGE_JPEG,
               url: 'url',
+              secure: false,
             },
           },
         ],
@@ -166,6 +173,7 @@ describe('groupMediaItemsByDate', () => {
               fileName: 'fileName',
               contentType: IMAGE_JPEG,
               url: 'url',
+              secure: false,
             },
           },
           {
@@ -180,6 +188,7 @@ describe('groupMediaItemsByDate', () => {
               fileName: 'fileName',
               contentType: IMAGE_JPEG,
               url: 'url',
+              secure: false,
             },
           },
         ],
@@ -201,6 +210,7 @@ describe('groupMediaItemsByDate', () => {
               fileName: 'fileName',
               contentType: IMAGE_JPEG,
               url: 'url',
+              secure: false,
             },
           },
           {
@@ -215,6 +225,7 @@ describe('groupMediaItemsByDate', () => {
               fileName: 'fileName',
               contentType: IMAGE_JPEG,
               url: 'url',
+              secure: false,
             },
           },
         ],

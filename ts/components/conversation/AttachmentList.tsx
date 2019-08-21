@@ -98,6 +98,7 @@ export class AttachmentList extends React.Component<Props> {
                 attachment={attachment}
                 i18n={i18n}
                 onClose={onCloseAttachment}
+                secure={attachment.secure}
               />
             );
           })}

@@ -267,7 +267,7 @@
       this.render();
     },
 
-    async maybeAddAttachment(file) {
+    async maybeAddAttachment(file, secure = false) {
       if (!file) {
         return;
       }
@@ -322,6 +322,7 @@
             contentType,
             videoUrl: objectUrl,
             url,
+            secure,
           });
         } catch (error) {
           URL.revokeObjectURL(objectUrl);
@@ -340,6 +341,7 @@
             fileName,
             contentType,
             url,
+            secure,
           });
           return;
         }
@@ -351,6 +353,7 @@
           fileName,
           contentType,
           url,
+          secure,
         });
       };
 
@@ -412,6 +415,7 @@
             size: file.size,
             contentType,
             fileName,
+            secure,
           });
         }
       } catch (e) {
@@ -424,6 +428,7 @@
           size: file.size,
           contentType,
           fileName,
+          secure,
         });
       }
     },

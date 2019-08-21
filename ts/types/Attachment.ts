@@ -34,6 +34,7 @@ export interface AttachmentType {
   pending?: boolean;
   width?: number;
   height?: number;
+  secure: boolean;
   screenshot?: {
     height: number;
     width: number;
@@ -350,6 +351,7 @@ export const save = ({
     fileArray.pop();
     filename = fileArray.join('.');
 
+    // @ts-ignore
     const { data } = Signal.Data.secunetDecrypt(url);
 
     url = data;

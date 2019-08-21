@@ -213,22 +213,6 @@
         }
       });
 
-      this.secureFileInput = new Whisper.FileInputView({
-        el: this.$('.attachment-list'),
-      });
-      this.listenTo(
-        this.secureFileInput,
-        'choose-attachment',
-        this.onChooseSecureAttachment
-      );
-      this.listenTo(this.secureFileInput, 'staged-attachments-changed', () => {
-        this.view.restoreBottomOffset();
-        this.toggleMicrophone();
-        if (this.secureFileInput.hasFiles()) {
-          this.removeLinkPreview();
-        }
-      });
-
       this.view = new Whisper.MessageListView({
         collection: this.model.messageCollection,
         window: this.window,
@@ -425,7 +409,7 @@
       for (let i = 0, max = files.length; i < max; i += 1) {
         const file = files[i];
         // eslint-disable-next-line no-await-in-loop
-        await this.secureFileInput.maybeAddAttachment(file);
+        await this.fileInput.maybeAddAttachment(file, true);
         this.toggleMicrophone();
       }
 
@@ -647,7 +631,7 @@
     },
 
     toggleMicrophone(dirty = false) {
-      if (dirty || this.fileInput.hasFiles() || this.secureFileInput.hasFiles()) {
+      if (dirty || this.fileInput.hasFiles()) {
         this.$('.capture-audio').hide();
       } else {
         this.$('.capture-audio').show();
@@ -1936,12 +1920,13 @@
       }
 
       try {
-        if (!message.length && !this.fileInput.hasFiles() && !this.secureFileInput.hasFiles()) {
+        if (!message.length && !this.fileInput.hasFiles()) {
           return;
         }
 
-        const regularAttachments = await this.fileInput.getFiles();
-        const secureAttachments = await this.secureFileInput.getFiles();
+        const allAttachments = await this.fileInput.getFiles();
+
+        const [secureAttachments, regularAttachments] = _.partition(allAttachments, 'secure');
 
         const encryptedAttachments = this.pgpEncrypt(secureAttachments, this.model.getNumber());
 

@@ -2675,70 +2675,76 @@
   box-shadow: inset 0px 0px 0px 1px $color-black-015;
   background-color: $color-gray-05;
   vertical-align: middle;
+
+  &__secure {
+    background-color: #e4003a;
+    color: white
+  }
+
+  &__close-button {
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 16px;
+    height: 16px;
+    z-index: 2;
+    @include color-svg('../images/x-16.svg', $color-black);
+  }
+
+  &__icon {
+    margin-top: 30px;
+
+    background: url('../images/file-gradient.svg') no-repeat center;
+    height: 44px;
+    width: 56px;
+    margin-left: 32px;
+    margin-right: 32px;
+    margin-bottom: -4px;
+
+    // So we can center the extension text inside this icon
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &__icon__extension {
+    font-size: 10px;
+    line-height: 13px;
+    letter-spacing: 0.1px;
+    text-transform: uppercase;
+
+    // Along with flow layout in parent item, centers text
+    text-align: center;
+    width: 25px;
+    margin-left: auto;
+    margin-right: auto;
+
+    // We don't have much room for text here, cut it off without ellipse
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
+
+    color: $color-gray-90;
+  }
+
+  &__filename {
+    margin: 7px;
+    margin-top: 5px;
+    text-align: center;
+
+    font-family: Roboto;
+    font-size: 14px;
+
+    overflow: hidden;
+    height: 2.4em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+  }
 }
 
-.module-staged-generic-attachment__close-button {
-  cursor: pointer;
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 16px;
-  height: 16px;
-  z-index: 2;
-  @include color-svg('../images/x-16.svg', $color-black);
-}
-
-.module-staged-generic-attachment__icon {
-  margin-top: 30px;
-
-  background: url('../images/file-gradient.svg') no-repeat center;
-  height: 44px;
-  width: 56px;
-  margin-left: 32px;
-  margin-right: 32px;
-  margin-bottom: -4px;
-
-  // So we can center the extension text inside this icon
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.module-staged-generic-attachment__icon__extension {
-  font-size: 10px;
-  line-height: 13px;
-  letter-spacing: 0.1px;
-  text-transform: uppercase;
-
-  // Along with flow layout in parent item, centers text
-  text-align: center;
-  width: 25px;
-  margin-left: auto;
-  margin-right: auto;
-
-  // We don't have much room for text here, cut it off without ellipse
-  overflow-x: hidden;
-  white-space: nowrap;
-  text-overflow: clip;
-
-  color: $color-gray-90;
-}
-
-.module-staged-generic-attachment__filename {
-  margin: 7px;
-  margin-top: 5px;
-  text-align: center;
-
-  font-family: Roboto;
-  font-size: 14px;
-
-  overflow: hidden;
-  height: 2.4em;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  text-overflow: ellipsis;
-}
 
 // Module: Caption Editor
 

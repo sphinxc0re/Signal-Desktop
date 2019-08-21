@@ -7,16 +7,19 @@ interface Props {
   attachment: AttachmentType;
   onClose: (attachment: AttachmentType) => void;
   i18n: LocalizerType;
+  secure: boolean,
 }
 
 export class StagedGenericAttachment extends React.Component<Props> {
   public render() {
-    const { attachment, onClose } = this.props;
+    const { attachment, onClose, secure } = this.props;
     const { fileName, contentType } = attachment;
     const extension = getExtensionForDisplay({ contentType, fileName });
 
+    const additionalClasses = secure ? 'module-staged-generic-attachment__secure' : '';
+
     return (
-      <div className="module-staged-generic-attachment">
+      <div className={`module-staged-generic-attachment ${additionalClasses}`}>
         <div
           className="module-staged-generic-attachment__close-button"
           role="button"
