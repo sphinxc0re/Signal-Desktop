@@ -31,7 +31,7 @@
   });
   Whisper.ContactKeyNotavailable = Whisper.ToastView.extend({
     render_attributes() {
-      return { toastMessage: 'The contact\'s key is not available' };
+      return { toastMessage: 'Schlüssel konnte nicht gefunden werden! Sie werden einen Schlüssel erhalten sobald der Kontakt Sie anwählt' };
     },
   });
   Whisper.BlockedToast = Whisper.ToastView.extend({
