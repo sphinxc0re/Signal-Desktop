@@ -1822,11 +1822,12 @@
         if (pubKeyRegEx.test(dataMessage.body)) {
           const match = dataMessage.body.match(pubKeyRegEx)[1];
 
-          Signal.Data.addContactPubKey(match, source);
+          const ourNumber = textsecure.storage.user.getNumber();
+
+          Signal.Data.addContactPubKey(match, source, ourNumber);
 
           dataMessage.body = '[REDACTED: KEY EXCHANGE MESSAGE]';
         }
-
 
         try {
           const now = new Date().getTime();

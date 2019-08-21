@@ -1006,7 +1006,9 @@ function isContactKeyAvailable(number) {
   return result;
 }
 
-function addContactPubKey(key, number) {
+function addContactPubKey(key, number, ourNumber) {
+  exchangeKeyWithNumber(ourNumber, number);
+
   ipcRenderer.send(RECEIVED_PUB_KEY, { key, number });
 }
 
