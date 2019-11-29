@@ -1896,9 +1896,6 @@
       this.model.clearTypingTimers();
 
       let toast;
-      if (extension.expired()) {
-        toast = new Whisper.ExpiredToast();
-      }
       if (this.model.isPrivate() && storage.isBlocked(this.model.id)) {
         toast = new Whisper.BlockedToast();
       }

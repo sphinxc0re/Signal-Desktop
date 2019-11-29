@@ -100,12 +100,6 @@
         .find('.network-status-container')
         .append(this.networkStatusView.render().el);
 
-      if (extension.expired()) {
-        const banner = new Whisper.ExpiredAlertBanner().render();
-        banner.$el.prependTo(this.$el);
-        this.$el.addClass('expired');
-      }
-
       Whisper.events.on('pack-install-failed', () => {
         const toast = new Whisper.StickerPackInstallFailedToast();
         toast.$el.appendTo(this.$el);
